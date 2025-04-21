@@ -10,4 +10,4 @@ To run the program, use the format: `./mwsat input_file.mwcnf`, where the input 
 
 The output files will have the same name as the input, but with `.dat` extension, and will be saved inside the `out` folder.
 
-To analyze the results, we used the Jupyter notebook: `jupyter/sample.ipynb`.
+The results were analyzed using the Jupyter notebook: `jupyter/sample.ipynb`.
