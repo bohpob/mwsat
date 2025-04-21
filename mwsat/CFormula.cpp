@@ -5,7 +5,7 @@ CFormula::CFormula(const vector<CClause> &clauses, const vector<shared_ptr<CLite
     this->clauses = clauses;
     this->literals = literals;
     for (const auto &literal: literals) {
-        totalWeight += literal->getWeight();
+        totalWeight += literal->getWeight();     // Calculate total weight of the literals
     }
 }
 
@@ -37,6 +37,8 @@ CFormula::CFormula(const vector<CClause> &clauses, const vector<shared_ptr<CLite
 
 [[nodiscard]] int CFormula::getWeight() const {
     int result = 0;
+
+    // Calculate the weight of literals that are set to true
     for (const auto &literal: literals) {
         if (literal->getValue()) {
             result += literal->getWeight();
@@ -48,6 +50,7 @@ CFormula::CFormula(const vector<CClause> &clauses, const vector<shared_ptr<CLite
 [[nodiscard]] int CFormula::getLiteralFromUnsatisfiedClause() const {
     vector<int> literalsFromUnsatisfiedClauses;
 
+    // Collect literals from unsatisfied clauses
     for (const auto &clause: clauses) {
         if (!clause.isClauseTrue()) {
             for (const auto &[fst, snd]: clause.getClause()) {
@@ -61,10 +64,12 @@ CFormula::CFormula(const vector<CClause> &clauses, const vector<shared_ptr<CLite
         }
     }
 
+    // If no unsatisfied clauses, return a random literal
     if (literalsFromUnsatisfiedClauses.empty()) {
         return fallbackDist(gen);
     }
 
+    // Otherwise, return a random literal from unsatisfied clauses
     uniform_int_distribution d(0, static_cast<int>(literalsFromUnsatisfiedClauses.size()) - 1);
     return literalsFromUnsatisfiedClauses[d(gen)];
 }

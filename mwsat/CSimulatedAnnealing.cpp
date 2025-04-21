@@ -37,13 +37,10 @@ void CSimulatedAnnealing::flipLiteral(const int index) const {
 }
 
 int CSimulatedAnnealing::chooseLiteral(const int prevSatisfied) const {
-    int literal;
     if (prevSatisfied == numClauses) {
-        literal = dist(gen);
-    } else {
-        literal = formula.getLiteralFromUnsatisfiedClause();
+        return dist(gen); // Random if all satisfied
     }
-    return literal;
+    return formula.getLiteralFromUnsatisfiedClause();
 }
 
 void CSimulatedAnnealing::tryState(const double t, ActualParameters &actParams) const {
@@ -72,12 +69,13 @@ void CSimulatedAnnealing::tryState(const double t, ActualParameters &actParams) 
             actParams.last_imp = actParams.inner;
         }
     } else {
+        // Possibly accept worse solution
         const double delta = howMuchWorse(prevSatisfied, prevWeight, newSatisfied, newWeight,
                                           formula.getTotalWeight());
         if (realDist(gen) < exp(delta / t)) {
-            actParams.satisfied = newSatisfied;
+            actParams.satisfied = newSatisfied; // Accept
         } else {
-            flipLiteral(literal);
+            flipLiteral(literal); // Reject, revert
         }
     }
 }
@@ -101,7 +99,9 @@ ActualParameters CSimulatedAnnealing::runSimulatedAnnealing() const {
             actParams.iter++;
         }
 
+        // Cool down temperature
         actParams.temp = cool(actParams.temp, saParams.cool);
+        // Adjust inner loop limit
         saParams.inner_max = static_cast<int>((2.5 + 5 * (actParams.iter / saParams.itr_max)) *
                                               (numLiterals + numClauses));
     }

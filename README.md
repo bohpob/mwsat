@@ -11,3 +11,5 @@ To run the program, use the format: `./mwsat input_file.mwcnf`, where the input 
 The output files will have the same name as the input, but with `.dat` extension, and will be saved inside the `out` folder.
 
 The results were analyzed using the Jupyter notebook: `jupyter/sample.ipynb`.
+
+The project is documented using `Doxygen`. Generate the documentation: `doxygen Doxyfile`.

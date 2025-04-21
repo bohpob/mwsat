@@ -4,7 +4,7 @@
 #include <sstream>
 
 void CInstanceReader::parseWeights(istringstream &iss, vector<shared_ptr<CLiteral> > &literals) {
-    iss.ignore();
+    iss.ignore(); // Ignore the first character
     int weight;
     for (int index = 1; iss >> weight && weight != 0; ++index) {
         literals.emplace_back(make_shared<CLiteral>(index, weight));
@@ -60,6 +60,7 @@ bool CInstanceReader::readFromFile(const string &filename, vector<CClause> &clau
         }
     }
 
+    // Check consistency of literals and clauses
     if (numLiterals != static_cast<int>(literals.size()) || numClauses != static_cast<int>(clauses.size())
         || literals.empty() || clauses.empty()) {
         cerr << "Number of literals or/and clauses do not match." << endl;

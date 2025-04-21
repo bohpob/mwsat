@@ -5,14 +5,21 @@
 
 using namespace std;
 
+/**
+ * @brief Holds configuration parameters for Simulated Annealing.
+ */
 struct SAParameters {
-    double t0; /* initial temperature */
-    double t_fin; /* final temperature */
-    double cool; /* cooling coefficient. */
-    int inner_max; /* inner loop count */
-    int itr_max; /* total iterations max */
-    int thr_imp; /* max iterations without improvement */
+    double t0;     ///< Initial temperature
+    double t_fin;  ///< Final temperature
+    double cool;   ///< Cooling coefficient
+    int inner_max; ///< Max iterations per temperature
+    int itr_max;   ///< Total iterations allowed
+    int thr_imp;   ///< Max iterations without improvement
 
+    /**
+     * @brief Initializes SA parameters based on the given formula.
+     * @param formula Boolean formula (CNF) used for setup.
+     */
     void setup(const CFormula &formula) {
         this->t0 = formula.numClauses() + formula.numLiterals();
         this->t_fin = 0.001;
@@ -24,17 +31,25 @@ struct SAParameters {
     }
 };
 
+/**
+ * @brief Holds dynamic state of the SA algorithm during execution.
+ */
 struct ActualParameters {
-    double temp; /* actual temperature */
-    int inner; /* inner loop count */
-    int iter; /* total iterations */
-    int last_imp; /* last improvement iteration */
-    int satisfied; /* current no. of satisfied clauses */
-    int best; /* max no. of satisfied clauses */
-    int best_weight; /* best weight achieved when all clauses are satisfied */
-    int num_clauses; /* total number of clauses */
-    vector<int> best_sol; /* best solution so far */
+    double temp;          ///< Current temperature
+    int inner;            ///< Current inner loop counter
+    int iter;             ///< Total iterations done
+    int last_imp;         ///< Last iteration where improvement happened
+    int satisfied;        ///< Number of satisfied clauses
+    int best;             ///< Best number of satisfied clauses
+    int best_weight;      ///< Best weight when all clauses are satisfied
+    int num_clauses;      ///< Total number of clauses
+    vector<int> best_sol; ///< Best solution found (as literals)
 
+    /**
+     * @brief Initializes dynamic state with starting formula and temperature.
+     * @param formula Boolean formula (CNF)
+     * @param t0 Initial temperature
+     */
     void setup(const CFormula &formula, const double t0) {
         this->temp = t0;
         this->inner = 0;
@@ -47,6 +62,10 @@ struct ActualParameters {
         this->newBestSolution(formula);
     }
 
+    /**
+     * @brief Saves the current assignment as the best known solution.
+     * @param formula Current formula state
+     */
     void newBestSolution(const CFormula &formula) {
         best_sol.clear();
         vector<int> result;
