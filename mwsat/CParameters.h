@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 
+#include "CFormula.h"
+
 using namespace std;
 
 struct SAParameters {

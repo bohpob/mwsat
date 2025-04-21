@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 
 #include "CFormula.h"
@@ -18,8 +19,9 @@ int main(const int argc, char *argv[]) {
     vector<shared_ptr<CLiteral> > literals;
 
     if (CInstanceReader::readFromFile(inputFile, clauses, literals)) {
-        CSimulatedAnnealing sa(CFormula(clauses, literals));
-        COutputWriter::writeInstanceToFile(inputFile, sa.runSimulatedAnnealing());
+        const CSimulatedAnnealing sa(CFormula(clauses, literals));
+        const ActualParameters actParams = sa.runSimulatedAnnealing();
+        COutputWriter::writeInstanceToFile(inputFile, actParams);
         return 0;
     }
     return 1;
